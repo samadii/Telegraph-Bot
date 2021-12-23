@@ -21,7 +21,7 @@ from config import UPDATE_CHANNEL, BOT_OWNER, DATABASE_URL, TELEGRAPH_TOKEN, F_S
 db = Database(DATABASE_URL, "TelegraphBot")
 
 Bot = Client(
-    "Telegraph Bot V2",
+    "Telegraph Bot",
     bot_token = BOT_TOKEN,
     api_id = API_ID,
     api_hash = API_HASH
@@ -29,15 +29,20 @@ Bot = Client(
 
 START_TEXT = """**Hello {} 😌
 I am small media or file to telegra.ph link uploader bot.**
+
 Also i can export webpages to telegra.ph archive.
+
 `Note: I can convert under 5MB photo or video to telegraph link.`
 """
 
 HELP_TEXT = """**Hey, Follow these steps:**
+
 ➠ Just give me a media under 5MB
 ➠ Then I will download it
 ➠ I will then upload it to the telegra.ph link
+
 **Available Commands**
+
 /start - Checking Bot Online
 /help - For more help
 /about - For more about me
@@ -45,10 +50,13 @@ HELP_TEXT = """**Hey, Follow these steps:**
 """
 
 ABOUT_TEXT = """--**About Me**-- 😎
+
 🤖 **Name :** [Telegraph Uploader](https://telegram.me/{})
-📢 **Channel :** [Fayas Noushad](https://telegram.me/FayasNoushad)
+
 📝 **Language :** [Python3](https://python.org)
+
 🧰 **Framework :** [Pyrogram](https://pyrogram.org)
+
 📡 **Server :** [Heroku](https://heroku.com)"""
 
 FORCE_SUBSCRIBE_TEXT = "<code>Sorry Dear You Must Join My Updates Channel for using me 😌😉....</code>"
