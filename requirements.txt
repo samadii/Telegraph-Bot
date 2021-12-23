@@ -4,3 +4,4 @@ telegraph
 motor
 aiofiles
 dnspython
+webpage2telegraph
