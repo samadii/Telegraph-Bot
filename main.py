@@ -15,58 +15,40 @@ from pyrogram.errors import FloodWait, InputUserDeactivated, UserIsBlocked, Peer
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 from telegraph import upload_file
 from database import Database
+from config import UPDATE_CHANNEL, BOT_OWNER, DATABASE_URL, TELEGRAPH_TOKEN, F_SUB, BOT_TOKEN, API_ID, API_HASH
 
 
-UPDATE_CHANNEL = os.environ.get("UPDATE_CHANNEL", "")
-BOT_OWNER = int(os.environ["BOT_OWNER"])
-DATABASE_URL = os.environ["DATABASE_URL"]
-db = Database(DATABASE_URL, "FnTelegraphBot")
+db = Database(DATABASE_URL, "TelegraphBot")
 
 Bot = Client(
-    "Telegraph Uploader Bot V2",
-    bot_token = os.environ["BOT_TOKEN"],
-    api_id = int(os.environ["API_ID"]),
-    api_hash = os.environ["API_HASH"],
+    "Telegraph Bot V2",
+    bot_token = BOT_TOKEN,
+    api_id = API_ID,
+    api_hash = API_HASH
 )
 
 START_TEXT = """**Hello {} 😌
 I am small media or file to telegra.ph link uploader bot.**
-
->> `I can convert under 5MB photo or video to telegraph link.`
-
-Made by @FayasNoushad"""
+Also i can export webpages to telegra.ph archive.
+`Note: I can convert under 5MB photo or video to telegraph link.`
+"""
 
 HELP_TEXT = """**Hey, Follow these steps:**
-
 ➠ Just give me a media under 5MB
 ➠ Then I will download it
 ➠ I will then upload it to the telegra.ph link
-
 **Available Commands**
-
 /start - Checking Bot Online
 /help - For more help
 /about - For more about me
 /status - For bot updates
-
-Made by @FayasNoushad"""
+"""
 
 ABOUT_TEXT = """--**About Me**-- 😎
-
 🤖 **Name :** [Telegraph Uploader](https://telegram.me/{})
-
-👨‍💻 **Developer :** [Fayas](https://github.com/FayasNoushad)
-
 📢 **Channel :** [Fayas Noushad](https://telegram.me/FayasNoushad)
-
-👥 **Group :** [Developer Team](https://telegram.me/TheDeveloperTeam)
-
-🌐 **Source :** [👉 Click here](https://github.com/FayasNoushad/Telegraph-Uploader-Bot-V2)
-
 📝 **Language :** [Python3](https://python.org)
-
 🧰 **Framework :** [Pyrogram](https://pyrogram.org)
-
 📡 **Server :** [Heroku](https://heroku.com)"""
 
 FORCE_SUBSCRIBE_TEXT = "<code>Sorry Dear You Must Join My Updates Channel for using me 😌😉....</code>"
@@ -186,13 +168,34 @@ async def about(bot, update):
     )
 
 
+@Bot.on_message(filters.private & filters.regex(pattern=".*http.*"))
+async def export_webpage_to_telegraph(bot, update):
+    
+    if not await db.is_user_exist(update.from_user.id):
+	    await db.add_user(update.from_user.id)
+
+    input_url = update.text
+    if TELEGRAPH_TOKEN:
+        try:
+            import webpage2telegraph
+            webpage2telegraph.token = TELEGRAPH_TOKEN
+            telegraph_url = webpage2telegraph.transfer(input_url)
+            if telegraph_url:
+                await update.reply_text(text=telegraph_url)
+            else:
+                await update.reply_text(text="Transfering Failed.")
+        except Exception as e:
+            print(e)
+            return
+
+
 @Bot.on_message(filters.media & filters.private)
 async def telegraph_upload(bot, update):
     
     if not await db.is_user_exist(update.from_user.id):
 	    await db.add_user(update.from_user.id)
     
-    if UPDATE_CHANNEL:
+    if F_SUB:
         try:
             user = await bot.get_chat_member(UPDATE_CHANNEL, update.chat.id)
             if user.status == "kicked":
@@ -208,7 +211,7 @@ async def telegraph_upload(bot, update):
             return
         except Exception as error:
             print(error)
-            await update.reply_text(text="Something wrong. Contact <a href='https://telegram.me/TheFayas'>Developer</a>.", disable_web_page_preview=True)
+            await update.reply_text(text="Something wrong.")
             return
     
     text = await update.reply_text(
@@ -247,7 +250,7 @@ async def telegraph_upload(bot, update):
                     InlineKeyboardButton(text="Open Link", url=f"https://telegra.ph{response[0]}"),
                     InlineKeyboardButton(text="Share Link", url=f"https://telegram.me/share/url?url=https://telegra.ph{response[0]}")
                 ],
-                [InlineKeyboardButton(text="⚙ Join Updates Channel ⚙", url="https://telegram.me/FayasNoushad")]
+                [InlineKeyboardButton(text="⚙ Join Updates Channel ⚙", url=UPDATE_CHANNEL if UPDATE_CHANNEL else "https://telegram.me/FayasNoushad")]
             ]
         )
     )
