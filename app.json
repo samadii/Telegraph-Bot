@@ -1,0 +1,43 @@
+{
+  "name": "Telegraph Bot",
+  "env": {
+    "BOT_TOKEN": {
+      "description": "Enter bot token.",
+      "value": ""
+    },
+    "API_ID": {
+      "description": "Get this value from my.telegram.org! Please do not steal.",
+      "value": ""
+    },
+    "API_HASH": {
+      "description": "Get this value from my.telegram.org! Please do not steal.",
+      "value": ""
+    },
+    "UPDATE_CHANNEL": {
+      "description": "your channel username(without @).",
+      "value": "",
+      "required": false
+    },
+    "F_SUB": {
+      "description": "set this to Anything to work force sub! Bot should be admin in your channel",
+      "value": "",
+      "required": false
+    },
+    "DATABASE_URL": {
+      "description": "your mongodb url"
+    },
+    "TELEGRAPH_TOKEN": {
+      "description": "your telegraph token",
+      "value": "",
+      "required": false
+    },
+    "BOT_OWNER": {
+      "description": "your telegram ID"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
