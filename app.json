@@ -26,11 +26,6 @@
     "DATABASE_URL": {
       "description": "your mongodb url"
     },
-    "TELEGRAPH_TOKEN": {
-      "description": "your telegraph token",
-      "value": "",
-      "required": false
-    },
     "BOT_OWNER": {
       "description": "your telegram ID"
     }
