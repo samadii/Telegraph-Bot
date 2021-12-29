@@ -8,6 +8,7 @@ import traceback
 import asyncio
 import datetime
 import aiofiles
+import webpage2telegraph
 from random import choice 
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -15,7 +16,7 @@ from pyrogram.errors import FloodWait, InputUserDeactivated, UserIsBlocked, Peer
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 from telegraph import upload_file
 from database import Database
-from config import UPDATE_CHANNEL, BOT_OWNER, DATABASE_URL, TELEGRAPH_TOKEN, F_SUB, BOT_TOKEN, API_ID, API_HASH
+from config import UPDATE_CHANNEL, BOT_OWNER, DATABASE_URL, F_SUB, BOT_TOKEN, API_ID, API_HASH
 
 
 db = Database(DATABASE_URL, "TelegraphBot")
@@ -183,18 +184,12 @@ async def export_webpage_to_telegraph(bot, update):
 	    await db.add_user(update.from_user.id)
 
     input_url = update.text
-    if TELEGRAPH_TOKEN:
-        try:
-            import webpage2telegraph
-            webpage2telegraph.token = TELEGRAPH_TOKEN
-            telegraph_url = webpage2telegraph.transfer(input_url)
-            if telegraph_url:
-                await update.reply_text(text=telegraph_url)
-            else:
-                await update.reply_text(text="Transfering Failed.")
-        except Exception as e:
-            print(e)
-            return
+    # webpage2telegraph.token = "your own Telegraph token"
+    telegraph_url = webpage2telegraph.transfer(input_url)
+    if telegraph_url:
+        await update.reply_text(text=telegraph_url)
+    else:
+        await update.reply_text(text="Transfering Failed.")
 
 
 @Bot.on_message(filters.media & filters.private)
