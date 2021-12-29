@@ -11,6 +11,3 @@ UPDATE_CHANNEL = os.environ.get("UPDATE_CHANNEL")
 
 # optional (set to Anything to enable the force subscribing)
 F_SUB = os.environ.get('F_SUB')
-
-# optional (only for enable the exporting webpages to Telegraph function)
-TELEGRAPH_TOKEN = os.environ.get('TELEGRAPH_TOKEN')
