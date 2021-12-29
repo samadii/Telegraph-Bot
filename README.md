@@ -17,7 +17,6 @@ An advanced telegram bot to upload media to telegraph, And also export webpages 
 
 ## Optional Variables
 
-- `TELEGRAPH_TOKEN` Your telegra.ph token
 - `UPDATE_CHANNEL` Your channel username (without @)
 - `F_SUB` Set this to ANYTHING to work force subscribe
 
